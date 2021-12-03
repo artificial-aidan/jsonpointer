@@ -184,7 +184,15 @@ func setSingleImpl(node, data interface{}, decodedToken string, nameProvider *sw
 
 	case reflect.Map:
 		kv := reflect.ValueOf(decodedToken)
-		rValue.SetMapIndex(kv, reflect.ValueOf(data))
+		var element reflect.Value
+
+		if data == nil {
+			element = reflect.ValueOf(&data).Elem()
+		} else {
+			element = reflect.ValueOf(data)
+		}
+
+		rValue.SetMapIndex(kv, element)
 		return nil
 
 	case reflect.Slice:
